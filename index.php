@@ -3,27 +3,37 @@
 spl_autoload_extensions('.php');
 function classLoader($class)
 {
-  $nomeArquivo = $class . '.php';
   $pastas = array('controller', 'model');
   foreach ($pastas as $pasta) {
-    $arquivo = "{$pasta}/{$nomeArquivo}";
+    $arquivo = "{$pasta}/{$class}.php";
     if (file_exists($arquivo)) {
       require_once($arquivo);
     }
   }
 }
-spl_autoload_register('classLoader');
+spl_autoload_register("classLoader");
 // Front Controller
 class Aplicacao
 {
+  static private $app = ["/lazaro2", "/lazaro2/index.php"];
   public static function run()
   {
     $layout = new Template('view/layout.html');
-    $class = "Inicio";
+    $route = new Route(self::$app);
+    $class = $route->getClassName();
+    $method = $route->getMethodName();
+    if (empty($class)) {
+      $class = "Inicio";
+    }
     if (class_exists($class)) {
       $pagina = new $class();
-      $conteudo = $pagina->controller();
-      $layout->set('conteudo', $conteudo);
+      if (method_exists($pagina, $method)) {
+        $pagina->$method();
+      } else {
+        $pagina->controller();
+      }
+      $layout->set('uri', self::$app[0]);
+      $layout->set('conteudo', $pagina->getMessage());
     }
     echo $layout->saida();
   }
