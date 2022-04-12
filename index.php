@@ -15,7 +15,7 @@ spl_autoload_register("classLoader");
 // Front Controller
 class Aplicacao
 {
-  static private $app = ["/lazaro2", "/lazaro2/index.php"];
+  static private $app = ["/TobiasWEB2", "/TobiasWEB2/index.php"];
   public static function run()
   {
     $layout = new Template('view/layout.html');
