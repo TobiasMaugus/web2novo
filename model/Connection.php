@@ -1,3 +1,4 @@
+<?php
 final class Connection{
     private function __construct(){
     }    

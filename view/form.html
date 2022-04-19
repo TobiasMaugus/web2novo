@@ -1,0 +1,17 @@
+<form method="post" action="?class=Form&method=salvar">
+    <div>
+        <label for="prato">Prato: </label>
+        <input type="text" name="prato" id="prato" required maxlength="50"/>
+    </div>
+    <div>
+        <label for="ingredientes">Ingredientes: </label>
+        <textarea name="ingredientes" id="ingredientes" required></textarea>
+    </div>
+    <div>
+        <label for="preco">Preço: </label>
+        <input type="number" step="0.01" name="preco" id="preco" required/>
+    </div>
+    <div>
+        <button type="submit">Salvar</button>
+    </div>
+</form>
