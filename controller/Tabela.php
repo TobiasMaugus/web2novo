@@ -15,6 +15,18 @@ class Tabela
     $tabela->set("linha", $resultado);
     $this->message = $tabela->saida();
   }
+
+  public function remover(){
+    try {
+      $conexao = Transaction::get();
+      $id = $conexao->quote($_GET["id"]);
+      $cardapio = new Crud("cardapio");
+      $resultado = $cardapio->delete("id = $id");
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
   public function getMessage()
   {
     return $this->message;

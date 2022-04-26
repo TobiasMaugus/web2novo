@@ -12,6 +12,18 @@
         <td>{prato}</td>
         <td>{ingredientes}</td>
         <td>{preco}</td>
+        <td>
+          <button type="button">Editar</button>
+        </td>
+        <td>
+          <button
+            type="button"
+            onclick="if(confirm('Deseja realmente apagar?'))
+              location.href='?class=Tabela&method=remover&id={id}'"
+          >
+            Remover
+          </button>
+        </td>
       </tr>
       {/linha}
     </tbody>
