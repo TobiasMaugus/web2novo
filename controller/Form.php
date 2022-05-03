@@ -10,6 +10,10 @@ class Form
   public function controller()
   {
     $form = new Template("view/form.html");
+    $form->set("id", "");
+    $form->set("prato", "");
+    $form->set("ingredientes", "");
+    $form->set("preco", "");
     $this->message = $form->saida();
   }
   public function salvar(){
@@ -20,7 +24,37 @@ class Form
         $prato = $conexao->quote($_POST["prato"]);
         $ingredientes = $conexao->quote($_POST["ingredientes"]);
         $preco = $conexao->quote($_POST["preco"]);
-        $resultado = $cardapio->insert("prato, ingredientes, preco", "$prato, $ingredientes, $preco");
+        if (empty($_POST["id"])) {
+          $cardapio->insert(
+            "prato, ingredientes, preco",
+            "$prato, $ingredientes, $preco"
+          );
+        } else {
+          $id = $conexao->quote($_POST["id"]);
+          $cardapio->update(
+            "prato = $prato, ingredientes = $ingredientes, preco = $preco",
+            "id = $id"
+          );
+        }
+      } catch (Exception $e) {
+        echo $e->getMessage();
+      }
+    }
+  }
+
+  public function editar()
+  {
+    if (isset($_GET["id"])) {
+      try {
+        $conexao = Transaction::get();
+        $id = $conexao->quote($_GET["id"]);
+        $cardapio = new Crud("cardapio");
+        $resultado = $cardapio->select("*", "id = $id");
+        $form = new Template("view/form.html");
+        foreach ($resultado[0] as $cod => $valor) {
+          $form->set($cod, $valor);
+        } 
+        $this->message = $form->saida();
       } catch (Exception $e) {
         echo $e->getMessage();
       }

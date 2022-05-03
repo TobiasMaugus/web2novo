@@ -1,15 +1,16 @@
 <form method="post" action="?class=Form&method=salvar">
     <div>
+        <input type="hidden" name="id" value="{id}" />
         <label for="prato">Prato: </label>
-        <input type="text" name="prato" id="prato" required maxlength="50"/>
+        <input type="text" name="prato" id="prato" required maxlength="50" value="{prato}"/>
     </div>
     <div>
         <label for="ingredientes">Ingredientes: </label>
-        <textarea name="ingredientes" id="ingredientes" required></textarea>
+        <textarea name="ingredientes" id="ingredientes" required>{ingredientes}</textarea>
     </div>
     <div>
         <label for="preco">Preço: </label>
-        <input type="number" step="0.01" name="preco" id="preco" required/>
+        <input type="number" step="0.01" name="preco" id="preco" required value="{preco}"/>
     </div>
     <div>
         <button type="submit">Salvar</button>

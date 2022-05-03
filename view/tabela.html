@@ -4,16 +4,20 @@
         <th>Prato</th>
         <th>Ingredientes</th>
         <th>Preço</th>
+        <th>Editar</th>
+        <th>Apagar</th>
       </tr>
     </thead>
     <tbody>
       {linha}
       <tr>
-        <td>{prato}</td>
+        <td>{prato}</td>    
         <td>{ingredientes}</td>
         <td>{preco}</td>
         <td>
-          <button type="button">Editar</button>
+          <button type="button"
+          onclick="location.href='?class=Form&method=editar&id={id}'"
+          >Editar</button>
         </td>
         <td>
           <button
