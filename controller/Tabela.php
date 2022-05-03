@@ -2,37 +2,55 @@
 class Tabela
 {
   private $message = "";
-  public function __construct(){
+  private $error = "";
+  public function __construct()
+  {
     Transaction::open();
   }
-
   public function controller()
   {
-    Transaction::get();
-    $cardapio = new Crud("cardapio");
-    $resultado = $cardapio->select();
-    $tabela = new Template("view/tabela.html");
-    $tabela->set("linha", $resultado);
-    $this->message = $tabela->saida();
-  }
-
-  public function remover(){
     try {
-      $conexao = Transaction::get();
-      $id = $conexao->quote($_GET["id"]);
+      Transaction::get();
       $cardapio = new Crud("cardapio");
-      $resultado = $cardapio->delete("id = $id");
+      $resultado = $cardapio->select();
+      $tabela = new Template("view/tabela.html");
+      if (is_array($resultado)) {
+        $tabela->set("linha", $resultado);
+        $this->message = $tabela->saida();
+      } else {
+        $this->message = $cardapio->getMessage();
+        $this->error = $cardapio->getError();
+      }
     } catch (Exception $e) {
-      echo $e->getMessage();
+      $this->message = $e->getMessage();
+      $this->error = true;
     }
   }
-
+  public function remover()
+  {
+    if (isset($_GET["id"])) {
+      try {
+        $conexao = Transaction::get();
+        $id = $conexao->quote($_GET["id"]);
+        $cardapio = new Crud("cardapio");
+        $cardapio->delete("id = $id");
+        $this->message = $cardapio->getMessage();
+        $this->error = $cardapio->getError();
+      } catch (Exception $e) {
+        $this->message = $e->getMessage();
+        $this->error = true;
+      }
+    } else {
+      $this->message = "Faltando parâmetro!";
+      $this->error = true;
+    }
+  }
   public function getMessage()
   {
     return $this->message;
   }
-
-  public function __destruct(){
+  public function __destruct()
+  {
     Transaction::close();
   }
 }
