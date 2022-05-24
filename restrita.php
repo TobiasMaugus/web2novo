@@ -3,9 +3,15 @@
 spl_autoload_extensions('.php');
 function classLoader($class)
 {
-  $pastas = array('controller', 'model');
+  $nomeArquivo = $class . "php";
+  $pastas = array(
+    "shared/controller",
+    "sahred/model",
+    "restrict/controller",
+    "restrict/model"
+  );
   foreach ($pastas as $pasta) {
-    $arquivo = "{$pasta}/{$class}.php";
+    $arquivo = "{$pasta}/{$nomeArquivo}";
     if (file_exists($arquivo)) {
       require_once($arquivo);
     }
@@ -22,19 +28,24 @@ if (!Session::getValue('id')) {
 class Aplicacao
 {
   static public $app = "/TobiasWEB2";
+  static private $uri = "/TobiasWEB2/restrita.php";
   public static function run()
   {
-    $layout = new Template('view/layout.html');
-    $method = "";
+    $layout = new Template('restrict/view/layout.html');
+    $layout->set("uri", self::$uri);
+    $layout->set("path", self::$path);
     if (isset($_GET["class"])) {
       $class = $_GET["class"];
+    } else {
+      $class = "Inicio"
     }
+
     if (isset($_GET["method"])) {
       $method = $_GET["method"];
+    } else {
+      $method = "";
     }
-    if (empty($class)) {
-      $class = "Inicio";
-    }
+
     if (class_exists($class)) {
       $pagina = new $class();
       if (method_exists($pagina, $method)) {
@@ -42,9 +53,9 @@ class Aplicacao
       } else {
         $pagina->controller();
       }
-      $layout->set('uri', self::$app);
       $layout->set('conteudo', $pagina->getMessage());
     }
+    $layout->set("nome", Session::getValue("nome"));
     echo $layout->saida();
   }
 }
