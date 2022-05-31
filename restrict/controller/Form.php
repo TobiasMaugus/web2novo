@@ -23,17 +23,17 @@ class Form
         $conexao = Transaction::get();
         $cardapio = new Crud("cardapio");
         $prato = $conexao->quote($_POST["prato"]);
-        $config = $conexao->quote($_POST["ingredientes"]);
+        $ingredientes = $conexao->quote($_POST["ingredientes"]);
         $preco = $conexao->quote($_POST["preco"]);
         if (empty($_POST["id"])) {
           $cardapio->insert(
             "prato, ingredientes, preco",
-            "$prato, $config, $preco"
+            "$prato, $ingredientes, $preco"
           );
         } else {
           $id = $conexao->quote($_POST["id"]);
           $cardapio->update(
-            "prato = $prato, ingredientes = $config, preco = $preco",
+            "prato = $prato, ingredientes = $ingredientes, preco = $preco",
             "id = $id"
           );
         }
@@ -57,7 +57,7 @@ class Form
         $cardapio = new Crud("cardapio");
         $resultado = $cardapio->select("*", "id = $id");
         if (!$cardapio->getError()) {
-          $form = new Template("view/form.html");
+          $form = new Template("restrict/view/form.html");
           foreach ($resultado[0] as $cod => $preco) {
             $form->set($cod, $preco);
           }
@@ -77,7 +77,7 @@ class Form
     if (is_string($this->error)) {
       return $this->message;
     } else {
-      $msg = new Template("view/msg.html");
+      $msg = new Template("shared/view/msg.html");
       if ($this->error) {
         $msg->set("cor", "danger");
       } else {
