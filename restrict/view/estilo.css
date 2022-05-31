@@ -53,6 +53,7 @@ table tbody tr td button {
   padding: 0.4rem;
   font-weight: bold;
   cursor: pointer;
+  color: #ffffff;
 }
 table tbody tr td button.edit {
   background-color: #1e90ff;
